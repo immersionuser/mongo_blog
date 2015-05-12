@@ -18,15 +18,20 @@ package course;
 
 import com.mongodb.ErrorCategory;
 import com.mongodb.MongoWriteException;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+
 import org.bson.Document;
+
 import sun.misc.BASE64Encoder;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Random;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -69,7 +74,10 @@ public class UserDAO {
     public Document validateLogin(String username, String password) {
         Document user = null;
 
-        // XXX 
+        FindIterable<Document> matchedUsers = usersCollection.find(Filters.eq("_id", username));
+        user = matchedUsers.first();
+
+        System.out.println("Retrieved " + user.get("_id") + " from the database.");
 
         if (user == null) {
             System.out.println("User not in database");
