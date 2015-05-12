@@ -38,20 +38,22 @@ public class UserDAO {
     public UserDAO(final MongoDatabase blogDatabase) {
         usersCollection = blogDatabase.getCollection("users");
     }
-
-    // validates that username is unique and insert into db
+    
+ // validates that username is unique and insert into db
     public boolean addUser(String username, String password, String email) {
 
         String passwordHash = makePasswordHash(password, Integer.toString(random.nextInt()));
 
-        // XXX WORK HERE
+        Document user = new Document();
+        user.put("_id", username);
+        user.put("password", passwordHash);
 
         if (email != null && !email.equals("")) {
-            // XXX WORK HERE
+        	user.put("email", email);
         }
 
         try {
-            // XXX WORK HERE
+        	usersCollection.insertOne(user);
             return true;
         } catch (MongoWriteException e) {
             if (e.getError().getCategory().equals(ErrorCategory.DUPLICATE_KEY)) {
@@ -61,7 +63,7 @@ public class UserDAO {
             throw e;
         }
     }
-
+    
     public Document validateLogin(String username, String password) {
         Document user = null;
 
