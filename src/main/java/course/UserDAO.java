@@ -43,15 +43,16 @@ public class UserDAO {
     public boolean addUser(String username, String password, String email) {
 
         String passwordHash = makePasswordHash(password, Integer.toString(random.nextInt()));
-
-        // XXX WORK HERE
+        Document user = new Document();
+        user.put("_id", username);
+        user.put("password", passwordHa);
 
         if (email != null && !email.equals("")) {
-            // XXX WORK HERE
+        	user.put("email", email);
         }
 
         try {
-            // XXX WORK HERE
+        	usersCollection.insertOne(user);
             return true;
         } catch (MongoWriteException e) {
             if (e.getError().getCategory().equals(ErrorCategory.DUPLICATE_KEY)) {
