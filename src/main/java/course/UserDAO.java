@@ -49,13 +49,19 @@ public class UserDAO {
         // be sure to add username and hashed password to the document. problem instructions
         // will tell you the schema that the documents must follow.
 
+        Document user = new Document();
+        user.put(" id", username);
+        user.put("password", passwordHash);
+        
         if (email != null && !email.equals("")) {
             // XXX WORK HERE
+          user.put("email",  email);
           // if there is an email address specified, add it to the document too.
         }
 
         try {
             // XXX WORK HERE
+            usersCollection.insertOne(user);
             // insert the document into the user collection here
             return true;
         } catch (MongoWriteException e) {
